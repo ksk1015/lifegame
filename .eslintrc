@@ -1,0 +1,3 @@
+{
+  "extends": ["eslint:all", "preact", "prettier", "prettier/@typescript-eslint"]
+}
