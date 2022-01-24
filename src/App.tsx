@@ -4,7 +4,7 @@ import { LifeGame } from './LifeGame'
 import { LifeGameCanvas } from './LifeGameCanvas'
 
 const lifeGame = new LifeGame(1, 1)
-const cellSize = 4
+const cellSize = 5
 const gutter = 1
 
 export function App() {

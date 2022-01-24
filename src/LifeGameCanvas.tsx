@@ -21,7 +21,7 @@ const draw = (
   const height = lifeGame.rows * (cellSize + gutter) + gutter
   canvas.width = width
   canvas.height = height
-  ctx.fillStyle = 'gray'
+  ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, width, height)
   ctx.fillStyle = 'green'
   lifeGame.cellsForEach((cellX, cellY, isLive) => {
