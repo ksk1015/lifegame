@@ -5,14 +5,15 @@ import { LifeGameCanvas } from './LifeGameCanvas'
 
 const lifeGame = new LifeGame(1, 1)
 const cellSize = 4
+const gutter = 1
 
 export function App() {
   console.log('App')
   const { width, height } = useViewportSize()
   useLayoutEffect(() => {
     const isInitial = lifeGame.length === 1
-    const cols = Math.floor(width / cellSize)
-    const rows = Math.floor(height / cellSize)
+    const cols = Math.floor((width - gutter) / (cellSize + gutter))
+    const rows = Math.floor((height - gutter) / (cellSize + gutter))
     lifeGame.setSize(cols, rows)
     if (isInitial) {
       lifeGame.random()
@@ -24,6 +25,7 @@ export function App() {
       <LifeGameCanvas
         lifeGame={lifeGame}
         cellSize={cellSize}
+        gutter={gutter}
         style="width: 100%; height: 100%"
       />
       <div style="position: absolute; bottom: 5px; right: 5px">
