@@ -29,7 +29,7 @@ export function App() {
     }
   }, [lifeGameSize])
   return (
-    <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%">
+    <div>
       <LifeGameCanvas
         lifeGame={lifeGame}
         cellSize={cellSize}
