@@ -4,6 +4,7 @@ export class LifeGame {
   private _cells: Uint8Array
   private _onChange: () => void = () => {}
   private _playId: number = 0
+  private _playInterval: number = 200
   constructor(cols: number, rows: number) {
     this._cols = cols
     this._rows = rows
@@ -46,6 +47,19 @@ export class LifeGame {
   }
   set onChange(callback: () => void) {
     this._onChange = callback
+  }
+  set playInterval(playInterval: number) {
+    if (playInterval === this._playInterval) {
+      return
+    }
+    this._playInterval = playInterval
+    if (this.isPlaying) {
+      this.pause()
+      this.play()
+    }
+  }
+  get playInterval() {
+    return this._playInterval
   }
   get isPlaying() {
     return !!this._playId
@@ -146,7 +160,7 @@ export class LifeGame {
     }
     this._playId = window.setInterval(() => {
       this.next()
-    }, 200)
+    }, this.playInterval)
   }
   pause() {
     if (!this.isPlaying) {
