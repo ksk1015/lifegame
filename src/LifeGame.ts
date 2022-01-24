@@ -18,11 +18,19 @@ export class LifeGame {
     this._onChange()
   }
   setSize(cols: number, rows: number) {
-    const cells = this.createCells(cols * rows)
-    // 現状のcellsを反映させたい
+    const nextCells = this.createCells(cols * rows)
+    const xMax = Math.min(cols, this.cols)
+    const yMax = Math.min(rows, this.rows)
+    for (let y = 0; y < yMax; y++) {
+      for (let x = 0; x < xMax; x++) {
+        if (this._cells[x + y * this.cols]) {
+          nextCells[x + y * cols] = 1
+        }
+      }
+    }
     this._cols = cols
     this._rows = rows
-    this.setCells(cells)
+    this.setCells(nextCells)
   }
   get cols() {
     return this._cols
