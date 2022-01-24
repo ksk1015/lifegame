@@ -1,32 +1,10 @@
-import { useLayoutEffect, useState } from 'preact/hooks'
+import { useLayoutEffect } from 'preact/hooks'
 import { useViewportSize } from './useViewportSize'
 import { LifeGame } from './LifeGame'
 import { LifeGameCanvas } from './LifeGameCanvas'
 
 const lifeGame = new LifeGame(1, 1)
 const cellSize = 4
-
-let isPlaying = 0
-const play = () => {
-  if (!isPlaying) {
-    isPlaying = window.setInterval(() => {
-      lifeGame.next()
-    }, 200)
-  }
-}
-const pause = () => {
-  if (isPlaying) {
-    window.clearInterval(isPlaying)
-    isPlaying = 0
-  }
-}
-const togglePlay = () => {
-  if (isPlaying) {
-    pause()
-  } else {
-    play()
-  }
-}
 
 export function App() {
   console.log('App')
@@ -38,7 +16,7 @@ export function App() {
     lifeGame.setSize(cols, rows)
     if (isInitial) {
       lifeGame.random()
-      play()
+      lifeGame.play()
     }
   }, [width, height])
   return (
@@ -49,7 +27,7 @@ export function App() {
         style="width: 100%; height: 100%"
       />
       <div style="position: absolute; bottom: 5px; right: 5px">
-        <button onClick={() => togglePlay()}>Play/Pause</button>
+        <button onClick={() => lifeGame.togglePlay()}>Play/Pause</button>
         <button onClick={() => lifeGame.next()}>Next</button>
         <button onClick={() => lifeGame.random()}>Random</button>
         {/* <button onClick={() => lifeGame.clear()}>CLEAR</button> */}

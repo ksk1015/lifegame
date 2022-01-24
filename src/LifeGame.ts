@@ -2,12 +2,12 @@ export class LifeGame {
   private _cols: number
   private _rows: number
   private _cells: Uint8Array
-  private _onChange: () => void
+  private _onChange: () => void = () => {}
+  private _playId: number = 0
   constructor(cols: number, rows: number) {
     this._cols = cols
     this._rows = rows
     this._cells = this.createCells()
-    this._onChange = () => {}
   }
   private createCells(length = this.length): Uint8Array {
     return new Uint8Array(length)
@@ -46,6 +46,9 @@ export class LifeGame {
   }
   set onChange(callback: () => void) {
     this._onChange = callback
+  }
+  get isPlaying() {
+    return !!this._playId
   }
   coord2index(x: number, y: number) {
     const index = x + y * this.cols
@@ -136,5 +139,27 @@ export class LifeGame {
       }
     }
     this.touchCells(coords)
+  }
+  play() {
+    if (this.isPlaying) {
+      return
+    }
+    this._playId = window.setInterval(() => {
+      this.next()
+    }, 200)
+  }
+  pause() {
+    if (!this.isPlaying) {
+      return
+    }
+    clearInterval(this._playId)
+    this._playId = 0
+  }
+  togglePlay() {
+    if (this.isPlaying) {
+      this.pause()
+    } else {
+      this.play()
+    }
   }
 }
