@@ -3,15 +3,19 @@ import { useEffect, useRef } from 'preact/hooks'
 
 type CanvasElementProps = Omit<JSX.IntrinsicElements['canvas'], 'ref'>
 
+type OnUnmount = (
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) => void
+
+type OnMount = (
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D
+) => OnUnmount | void
+
 export type CanvasProps = CanvasElementProps & {
-  onMount?: (
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D
-  ) => void
-  onUnmount?: (
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D
-  ) => void
+  onMount?: OnMount
+  onUnmount?: OnMount
 }
 
 export const Canvas = memo((props: CanvasProps) => {
@@ -23,9 +27,10 @@ export const Canvas = memo((props: CanvasProps) => {
     const context = canvas?.getContext('2d')
     if (canvas && context) {
       console.log('CanvasOnMount')
-      onMount && onMount(canvas, context)
+      const returnedOnUnmount = onMount ? onMount(canvas, context) : null
       return () => {
         console.log('CanvasOnUnMount')
+        returnedOnUnmount && returnedOnUnmount(canvas, context)
         onUnmount && onUnmount(canvas, context)
       }
     }

@@ -8,7 +8,10 @@ type LifeGameCanvasProps = {
   cellSize?: number
   gutter?: number
   style?: JSX.CSSProperties | string
+  updateFps?: (fps: number) => void
 }
+
+const updateSize = () => {}
 
 const draw = (
   canvas: HTMLCanvasElement,
@@ -24,8 +27,8 @@ const draw = (
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, width, height)
   ctx.fillStyle = 'green'
-  lifeGame.cellsForEach((cellX, cellY, isLive) => {
-    if (isLive) {
+  lifeGame.forEachCells((cellX, cellY, state) => {
+    if (state) {
       const x = gutter + cellX * (cellSize + gutter)
       const y = gutter + cellY * (cellSize + gutter)
       ctx.fillRect(x, y, cellSize, cellSize)
@@ -34,21 +37,33 @@ const draw = (
 }
 
 export const LifeGameCanvas = memo(
-  ({ lifeGame, cellSize = 4, gutter = 1, style = {} }: LifeGameCanvasProps) => {
+  ({
+    lifeGame,
+    cellSize = 5,
+    gutter = 1,
+    style = {},
+    updateFps = (fps: number) => {},
+  }: LifeGameCanvasProps) => {
     console.log('LifeGameCanvas')
     const onMount = useCallback(
       (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
-        lifeGame.onChange = () => {
-          console.log('onChange')
-          draw(canvas, ctx, lifeGame, cellSize, gutter)
+        let requestID = 0
+        const loop = () => {
+          const t0 = performance.now()
+          requestID = requestAnimationFrame(() => {
+            draw(canvas, ctx, lifeGame, cellSize, gutter)
+            const t1 = performance.now()
+            updateFps(1000 / (t1 - t0))
+            loop()
+          })
         }
-        draw(canvas, ctx, lifeGame, cellSize, gutter)
+        loop()
+        return () => {
+          cancelAnimationFrame(requestID)
+        }
       },
-      [cellSize]
+      []
     )
-    const onUnmount = useCallback(() => {
-      lifeGame.onChange = () => {}
-    }, [])
-    return <Canvas onMount={onMount} onUnmount={onUnmount} style={style} />
+    return <Canvas onMount={onMount} style={style} />
   }
 )
