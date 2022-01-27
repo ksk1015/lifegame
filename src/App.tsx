@@ -37,18 +37,6 @@ export function App() {
         <button onClick={() => lifeGame.togglePlay()}>Play/Pause</button>
         <button onClick={() => lifeGame.next()}>Next</button>
         <button onClick={() => lifeGame.random()}>Random</button>
-        <button
-          onClick={() => {
-            // prettier-ignore
-            lifeGame.clear().touchPlane([
-              [0,1,0],
-              [0,0,1],
-              [1,1,1],
-            ], 5, 5)
-          }}
-        >
-          Glider
-        </button>
       </div>
     </div>
   )
