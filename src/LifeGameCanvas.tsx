@@ -27,7 +27,7 @@ const draw = (
   ctx.fillStyle = 'black'
   ctx.fillRect(0, 0, width, height)
   ctx.fillStyle = 'green'
-  lifeGame.forEachCells((cellX, cellY, state) => {
+  lifeGame.getEachCell((cellX, cellY, state) => {
     if (state) {
       const x = gutter + cellX * (cellSize + gutter)
       const y = gutter + cellY * (cellSize + gutter)
