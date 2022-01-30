@@ -1,39 +1,15 @@
 import { useLayoutEffect, useState } from 'preact/hooks'
 import { useViewportSize } from './useViewportSize'
-import { LifeGame } from './LifeGame'
-import { LifeGameCanvas } from './LifeGameCanvas'
-
-const lifeGame = new LifeGame(1, 1)
-const cellSize = 5
-const gutter = 1
-
-const useLifeGameSize = () => {
-  const viewportSize = useViewportSize()
-  const cols = Math.ceil((viewportSize.width - gutter) / (cellSize + gutter))
-  const rows = Math.ceil((viewportSize.height - gutter) / (cellSize + gutter))
-  const width = gutter + cols * (cellSize + gutter)
-  const height = gutter + rows * (cellSize + gutter)
-  return { cols, rows, width, height }
-}
+import { useLifeGame } from './useLifeGame'
 
 export function App() {
   console.log('App')
-  const { cols, rows, width, height } = useLifeGameSize()
-  // const [fps, setFps] = useState(0)
-  useLayoutEffect(() => {
-    lifeGame.setSize(cols, rows).random().play()
-  }, [cols, rows])
+  const { width, height } = useViewportSize()
+  const { lifeGame, LifeGameView } = useLifeGame()
   return (
     <div>
-      <LifeGameCanvas
-        lifeGame={lifeGame}
-        cellSize={cellSize}
-        gutter={gutter}
-        style={`width: ${width}px; height: ${height}px`}
-        // updateFps={setFps}
-      />
+      <LifeGameView width={width} height={height} cellSize={5} gutter={1} />
       <div style="position: absolute; bottom: 5px; right: 5px; display: flex; gap: 5px;">
-        {/* <span style="color: #fff">{Math.round(fps)}</span> */}
         <button onClick={() => lifeGame.togglePlay()}>Play/Pause</button>
         <button onClick={() => lifeGame.next()}>Next</button>
         <button onClick={() => lifeGame.random()}>Random</button>
